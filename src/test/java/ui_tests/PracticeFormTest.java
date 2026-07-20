@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PracticeFormTest extends BaseTest {
 
     @Test
-    @Description("Verify successful form submission when all required fields are filled with valid data and the confirmation modal displays correct information")
+    @Description("Verify successful form submission when all required fields are filled with valid data")
     void fillPracticeFormTest() throws InterruptedException {
         PracticeFormData data = practiceFormRandomData.createRandomData();
         practiceFormPage.openPracticeFormPage();
@@ -28,53 +28,70 @@ public class PracticeFormTest extends BaseTest {
                 .selectState(data.state())
                 .selectCity(data.city())
                 .clickSubmitForm();
-        assertEquals(
-                "Thanks for submitting the form",
-                submissionModal.getTitle()
-        );
 
-        assertEquals(
-                data.firstName() + " " + data.lastName(),
-                submissionModal.getValue("Student Name")
-        );
+        submissionModal
+                .shouldBeOpened()
+                .shouldHaveTitle("Thanks for submitting the form")
+                .shouldHaveValue("Student Name", data.firstName() + " " + data.lastName())
+                .shouldHaveValue("Student Email", data.email())
+                .shouldHaveValue("Gender", data.gender())
+                .shouldHaveValue("Mobile", data.mobile())
+                .shouldHaveValue("Date of Birth", String.format("%02d", Integer.parseInt(data.day()))
+                        + " " + data.month()
+                        + "," + data.year())
+                .shouldHaveValue("Subjects", String.join(", ", data.subjects()))
+                .shouldHaveValue("Hobbies", String.join(", ", data.hobbies()))
+                .shouldHaveValue("Picture", practiceFormPage.getFileName(data.selectPic()))
+                .shouldHaveValue("Address", data.address())
+                .shouldHaveValue("State and City", data.state() + " " + data.city());
 
-        assertEquals(
-                data.email(),
-                submissionModal.getValue("Student Email")
-        );
-
-        assertEquals(
-                data.gender(),
-                submissionModal.getValue("Gender"));
-        assertEquals(
-                data.mobile(),
-                submissionModal.getValue("Mobile")
-        );
-        String expectedDay = String.format("%02d", Integer.parseInt(data.day()));
-
-        assertEquals(
-                expectedDay + " " + data.month() + "," + data.year(),
-                submissionModal.getValue("Date of Birth")
-        );
-        assertEquals(
-                String.join(", ", data.subjects()),
-                submissionModal.getValue("Subjects")
-        );
-        assertEquals(
-                String.join(", ", data.hobbies()),
-                submissionModal.getValue("Hobbies")
-        );
-        assertEquals(
-                practiceFormPage.getFileName(data.selectPic()),
-                submissionModal.getValue("Picture")
-        );
-        assertEquals(
-                data.address(),
-                submissionModal.getValue("Address")
-        );
-        assertEquals(
-                data.state() + " " + data.city(),
-                submissionModal.getValue("State and City")
-        );
+//        assertEquals(
+//                "Thanks for submitting the form",
+//                submissionModal.getActualTitle()
+//        );
+//
+//        assertEquals(
+//                data.firstName() + " " + data.lastName(),
+//                submissionModal.getActualValue("Student Name")
+//        );
+//
+//        assertEquals(
+//                data.email(),
+//                submissionModal.getActualValue("Student Email")
+//        );
+//
+//        assertEquals(
+//                data.gender(),
+//                submissionModal.getActualValue("Gender"));
+//        assertEquals(
+//                data.mobile(),
+//                submissionModal.getActualValue("Mobile")
+//        );
+//        String expectedDay = String.format("%02d", Integer.parseInt(data.day()));
+//
+//        assertEquals(
+//                expectedDay + " " + data.month() + "," + data.year(),
+//                submissionModal.getActualValue("Date of Birth")
+//        );
+//        assertEquals(
+//                String.join(", ", data.subjects()),
+//                submissionModal.getActualValue("Subjects")
+//        );
+//        assertEquals(
+//                String.join(", ", data.hobbies()),
+//                submissionModal.getActualValue("Hobbies")
+//        );
+//        assertEquals(
+//                practiceFormPage.getFileName(data.selectPic()),
+//                submissionModal.getActualValue("Picture")
+//        );
+//        assertEquals(
+//                data.address(),
+//                submissionModal.getActualValue("Address")
+//        );
+//        assertEquals(
+//                data.state() + " " + data.city(),
+//                submissionModal.getActualValue("State and City")
+//        );
     }
 }
