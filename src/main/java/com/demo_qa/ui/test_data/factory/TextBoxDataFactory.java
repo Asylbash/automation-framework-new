@@ -15,4 +15,13 @@ public class TextBoxDataFactory {
                 faker.address().fullAddress()
         );
     }
+
+    public TextBoxData createInvalidEmailTextBoxData() {
+        return new TextBoxData(
+                faker.name().fullName(),
+                "invalid-email-format",
+                faker.address().streetAddress(),
+                faker.address().fullAddress()
+        );
+    }
 }

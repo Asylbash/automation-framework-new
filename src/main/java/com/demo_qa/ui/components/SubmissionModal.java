@@ -38,6 +38,11 @@ public class SubmissionModal {
         return this;
     }
 
+    public SubmissionModal shouldNotBeOpened() {
+        title.shouldNotBe(visible);
+        return this;
+    }
+
     //assertEquals(expected, actual);
 
 //    public String getActualValue(String label) {

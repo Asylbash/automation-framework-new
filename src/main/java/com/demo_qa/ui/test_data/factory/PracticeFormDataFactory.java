@@ -86,4 +86,28 @@ public class PracticeFormDataFactory {
         );
 
     }
+
+    public PracticeFormData createRandomDataWithInvalidEmail(String email) {
+        String state = randomState();
+        return new PracticeFormData(
+
+                faker.name().firstName(),
+                faker.name().lastName(),
+                email,
+                getGender(),
+                randomPhoneNumber(10),
+                String.valueOf(faker.number().numberBetween(1, 28)),
+                getMonth(),
+                String.valueOf(faker.number().numberBetween(1980, 2005)),
+                getRandomSubjects(),
+                getRandomHobbies(),
+                faker.address().streetAddress(),
+                state,
+                randomCity(state),
+                "images/photo.png"
+        );
+
+    }
+
+
 }

@@ -6,16 +6,15 @@ import com.demo_qa.ui.components.CalendarComponent;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class PracticeFormPage {
 
     private final CalendarComponent calendarComponent = new CalendarComponent();
 
+    private final SelenideElement form = $("#userForm");
     private final SelenideElement firstNameInput = $("#firstName");
     private final SelenideElement lastNameInput = $("#lastName");
     private final SelenideElement userEmailInput = $("#userEmail");
@@ -29,6 +28,8 @@ public class PracticeFormPage {
     private final SelenideElement stateCityInput = $("#stateCity-wrapper");
     private final SelenideElement cityDropdown = $("#city");
     private final SelenideElement submitButton = $("#submit");
+    private static final String WAS_VALIDATED = "was-validated";
+    private final SelenideElement modal = $(".modal-content");
 
     public PracticeFormPage openPracticeFormPage() {
 
@@ -130,6 +131,39 @@ public class PracticeFormPage {
     public String getFileName(String filePath) {
 
         return Paths.get(filePath).getFileName().toString();
+
+    }
+
+    public PracticeFormPage shouldShowValidation() {
+
+        form.shouldHave(cssClass(WAS_VALIDATED));
+
+        return this;
+
+    }
+
+    private SelenideElement field(String id) {
+        return $("#" + id);
+    }
+
+    public PracticeFormPage shouldBeInvalid(String fieldId) {
+
+        Boolean invalid = executeJavaScript(
+                "return document.getElementById(arguments[0]).matches(':invalid')",
+                fieldId
+        );
+
+        if (!Boolean.TRUE.equals(invalid)) {
+            throw new AssertionError(fieldId + " should be invalid");
+        }
+        return this;
+
+    }
+
+    public PracticeFormPage shouldNotOpenModal() {
+
+        modal.shouldNot(appear);
+        return this;
 
     }
 }
