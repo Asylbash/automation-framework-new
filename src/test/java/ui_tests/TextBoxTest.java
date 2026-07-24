@@ -1,6 +1,6 @@
 package ui_tests;
 
-import com.demo_qa.ui.test_data.models.TextBoxData;
+import com.demo_qa.ui.test_data.models.TextBoxUser;
 import jdk.jfr.Description;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ public class TextBoxTest extends BaseTest {
     @Description("Verify that the text box form can be filled and submitted successfully, " +
             "and the confirmation modal displays the correct information")
     void fillTextBoxFormTest() {
-        TextBoxData data = textBoxRandomData.createRandomTextBoxData();
+        TextBoxUser data = textBoxRandomData.createRandomTextBoxData();
         textBoxPage
                 .openTextBoxPage();
         javaScriptHelper.removeFixedElements();
@@ -32,7 +32,10 @@ public class TextBoxTest extends BaseTest {
     @Description("Negative test: Verify that the form does not accept invalid email format and " +
             "highlights the email field as invalid")
     void fillTextBoxFormWithInvalidEmailTest() {
-        TextBoxData data = textBoxRandomData.createInvalidEmailTextBoxData();
+        TextBoxUser data = textBoxRandomData.createRandomTextBoxData()
+                .toBuilder()
+                .userEmail("invalid-email-format")
+                .build();
         textBoxPage
                 .openTextBoxPage();
         javaScriptHelper.removeFixedElements();
@@ -60,7 +63,7 @@ public class TextBoxTest extends BaseTest {
     @Test
     @Description("Verify that if fillup one field system accepts it and display output")
     void fillTextBoxFormWithOneFieldTest() {
-        TextBoxData data = textBoxRandomData.createRandomTextBoxData();
+        TextBoxUser data = textBoxRandomData.createRandomTextBoxData();
         textBoxPage
                 .openTextBoxPage();
         javaScriptHelper.removeFixedElements();

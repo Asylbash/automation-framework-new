@@ -42,6 +42,7 @@ public class BaseTest {
         Configuration.browser = "chrome";
         Configuration.browserSize = "2560x1440";
         Configuration.pageLoadStrategy = "eager";
+        Configuration.headless = false;
     }
 
     @AfterEach

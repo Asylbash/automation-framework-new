@@ -1,6 +1,6 @@
 package ui_tests;
 
-import com.demo_qa.ui.test_data.models.PracticeFormData;
+import com.demo_qa.ui.test_data.models.PracticeFormUser;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,8 +10,8 @@ public class PracticeFormTest extends BaseTest {
 
     @Test
     @Description("Verify successful form submission when all required fields are filled with valid data")
-    void fillPracticeFormTest() throws InterruptedException {
-        PracticeFormData data = practiceFormRandomData.createRandomData();
+    void fillPracticeFormTest() {
+        PracticeFormUser data = practiceFormRandomData.createNewUser();
         practiceFormPage.openPracticeFormPage();
         javaScriptHelper.removeFixedElements();
         practiceFormPage
@@ -59,7 +59,7 @@ public class PracticeFormTest extends BaseTest {
     @Test
     @Description("Verify that first name field is validated when left empty")
     void fillPracticeFormWithEmptyFirstNameTest() {
-        PracticeFormData data = practiceFormRandomData.createRandomData();
+        PracticeFormUser data = practiceFormRandomData.createNewUser();
 
         practiceFormPage.openPracticeFormPage();
         javaScriptHelper.removeFixedElements();
@@ -76,7 +76,7 @@ public class PracticeFormTest extends BaseTest {
     @Test
     @Description("Verify that only requared fields are filled and form submission is successful")
     void fillPracticeFormWithOnlyRequiredFieldsTest() {
-        PracticeFormData data = practiceFormRandomData.createRandomData();
+        PracticeFormUser data = practiceFormRandomData.createNewUser();
         practiceFormPage.openPracticeFormPage();
         javaScriptHelper.removeFixedElements();
         practiceFormPage
@@ -101,7 +101,10 @@ public class PracticeFormTest extends BaseTest {
     )
     @Description("Verify that the form submission fails when an invalid email is provided")
     void shouldNotAcceptInvalidEmail(String email) {
-        PracticeFormData data = practiceFormRandomData.createRandomDataWithInvalidEmail(email);
+        PracticeFormUser data = practiceFormRandomData.createNewUser()
+                .toBuilder()
+                .email(email)
+                .build();
         practiceFormPage.openPracticeFormPage();
         javaScriptHelper.removeFixedElements();
         practiceFormPage
@@ -115,6 +118,7 @@ public class PracticeFormTest extends BaseTest {
                 .shouldBeInvalid("userEmail")
                 .shouldNotOpenModal();
     }
+
     @ParameterizedTest
     @CsvFileSource(
             resources = "/test-data/invalid-phones.csv",
@@ -122,7 +126,10 @@ public class PracticeFormTest extends BaseTest {
     )
     @Description("Verify that the form submission fails when an invalid phone number is provided")
     void shouldNotAcceptInvalidPhoneNumber(String phoneNumber) {
-        PracticeFormData data = practiceFormRandomData.createRandomData();
+        PracticeFormUser data = practiceFormRandomData.createNewUser()
+                .toBuilder()
+                .mobile(phoneNumber)
+                .build();
         practiceFormPage.openPracticeFormPage();
         javaScriptHelper.removeFixedElements();
         practiceFormPage
@@ -130,7 +137,7 @@ public class PracticeFormTest extends BaseTest {
                 .insertLastName(data.lastName())
                 .insertUserEmail(data.email())
                 .selectGender(data.gender())
-                .insertUserNumber(phoneNumber)
+                .insertUserNumber(data.mobile())
                 .clickSubmitForm()
                 .shouldShowValidation()
                 .shouldBeInvalid("userNumber")
